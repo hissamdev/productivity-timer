@@ -74,7 +74,11 @@ export default function TimerFocusScreen() {
                             fontSize: 70,
                         }}
                     >
-                        {isRunning === "initial" ? "Start" : formatTime(second)}
+                        {isRunning === "initial"
+                            ? "Start"
+                            : isRunning === "paused"
+                              ? "Paused"
+                              : formatTime(second)}
                     </Text>
                 </TouchableOpacity>
             </View>
