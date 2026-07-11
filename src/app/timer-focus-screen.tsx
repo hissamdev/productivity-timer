@@ -1,8 +1,43 @@
-import { Text, View } from "react-native";
+import { useEffect, useRef, useState } from "react";
+import { Text, TouchableOpacity, View } from "react-native";
 
 export default function TimerFocusScreen() {
+    const [second, setSecond] = useState(0);
+    const [isRunning, setIsRunning] = useState<
+        "initial" | "running" | "paused"
+    >("initial");
+    const timer = useRef<ReturnType<typeof setInterval>>(null);
+
+    useEffect(() => {
+        if (isRunning === "running") {
+            timer.current = setInterval(() => {
+                setSecond((prev) => prev + 1);
+            }, 1000);
+        } else if (timer.current) {
+            clearInterval(timer.current);
+        }
+
+        return () => {
+            if (timer.current) clearInterval(timer.current);
+        };
+    }, [isRunning]);
+
+    const formatTime = (seconds: number) => {
+        const mins = Math.floor(seconds / 60)
+            .toString()
+            .padStart(2, "0");
+        const sec = (seconds % 60).toString().padStart(2, "0");
+
+        return `${mins}:${sec}`;
+    };
+
     return (
-        <View
+        <TouchableOpacity
+            onPress={() =>
+                setIsRunning((prev) =>
+                    prev === "paused" ? "running" : "paused",
+                )
+            }
             style={[
                 {
                     height: "100%",
@@ -22,7 +57,7 @@ export default function TimerFocusScreen() {
                     borderRadius: "100%",
                 }}
             >
-                <View
+                <TouchableOpacity
                     style={{
                         width: "100%",
                         height: "100%",
@@ -36,13 +71,16 @@ export default function TimerFocusScreen() {
                     <Text
                         style={{
                             color: "white",
-                            fontSize: 50,
+                            fontSize: 70,
                         }}
                     >
-                        03:32
+                        {isRunning === "initial" ? "Start" : formatTime(second)}
                     </Text>
-                </View>
+                </TouchableOpacity>
             </View>
-        </View>
+            <TouchableOpacity>
+                <Text>Start/Stop</Text>
+            </TouchableOpacity>
+        </TouchableOpacity>
     );
 }
