@@ -35,7 +35,11 @@ export default function TimerFocusScreen() {
         <TouchableOpacity
             onPress={() =>
                 setIsRunning((prev) =>
-                    prev === "paused" ? "running" : "paused",
+                    prev === "initial"
+                        ? "running"
+                        : prev === "running"
+                          ? "paused"
+                          : "running",
                 )
             }
             style={[
@@ -49,7 +53,7 @@ export default function TimerFocusScreen() {
         >
             <View
                 style={{
-                    marginTop: 180,
+                    marginTop: 120,
                     padding: 4,
                     width: 261,
                     aspectRatio: 1,
@@ -82,8 +86,19 @@ export default function TimerFocusScreen() {
                     </Text>
                 </TouchableOpacity>
             </View>
-            <TouchableOpacity>
-                <Text>Start/Stop</Text>
+
+            <TouchableOpacity
+                onPress={() => setSecond(0)}
+                style={{
+                    marginTop: 40,
+                    paddingHorizontal: 30,
+                    paddingVertical: 5,
+                    borderRadius: 5,
+                    borderColor: "white",
+                    borderWidth: 2,
+                }}
+            >
+                <Text style={{ color: "white" }}>Reset</Text>
             </TouchableOpacity>
         </TouchableOpacity>
     );
