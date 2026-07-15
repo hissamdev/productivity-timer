@@ -14,7 +14,7 @@ export default function Index() {
             }}
         >
             <TouchableOpacity
-                onPress={() => router.push("/timerProfiles/timer-focus-screen")}
+                onPress={() => router.push("/timer/timer-single-screen")}
                 style={[
                     {
                         justifyContent: "center",
@@ -29,9 +29,7 @@ export default function Index() {
                 <Text>Timer</Text>
             </TouchableOpacity>
             <TouchableOpacity
-                onPress={() =>
-                    router.push("/timerProfiles/grouped-timers-screen")
-                }
+                onPress={() => router.push("/timer/timer-profiles-screen")}
                 style={[
                     {
                         justifyContent: "center",

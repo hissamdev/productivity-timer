@@ -9,10 +9,12 @@ export default function GroupedTimersScreen() {
                 {
                     label: "Coding",
                     timer: 0,
+                    running: false,
                 },
                 {
                     label: "Valorant",
                     timer: 0,
+                    running: false,
                 },
             ],
         },
