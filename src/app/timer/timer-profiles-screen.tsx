@@ -1,7 +1,9 @@
+import { useRouter } from "expo-router";
 import { useState } from "react";
 import { Text, TouchableOpacity, View } from "react-native";
 
 export default function GroupedTimersScreen() {
+    const router = useRouter();
     const [timerGroups, setTimerGroups] = useState([
         {
             name: "Multitask",
@@ -36,6 +38,16 @@ export default function GroupedTimersScreen() {
             >
                 {timerGroups.map((group) => (
                     <TouchableOpacity
+                        key={group.name}
+                        onPress={() =>
+                            router.push({
+                                pathname:
+                                    "/timer/group-of-timers/timers-screen",
+                                params: {
+                                    timers: JSON.stringify(group.timers),
+                                },
+                            })
+                        }
                         style={{
                             height: 50,
                             flex: 1,
