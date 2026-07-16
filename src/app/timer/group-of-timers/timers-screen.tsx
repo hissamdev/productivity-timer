@@ -21,11 +21,11 @@ export default function TimersScreen() {
         <View
             style={{
                 marginVertical: "auto",
-                marginHorizontal: 30,
+                marginHorizontal: 10,
                 minHeight: "60%",
                 display: "flex",
                 flexDirection: "row",
-                gap: 8,
+                gap: 10,
                 // borderColor: "black",
                 // borderWidth: 2,
             }}
