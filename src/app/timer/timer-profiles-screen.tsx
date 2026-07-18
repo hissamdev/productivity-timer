@@ -1,14 +1,20 @@
 import { useProfileStore } from "@/components/state-management/useProfileStore";
 import { useRouter } from "expo-router";
+import { useState } from "react";
 import { Text, TouchableOpacity, View } from "react-native";
 
 export default function GroupedTimersScreen() {
     const router = useRouter();
-    const { profiles } = useProfileStore();
+    const { profiles, createProfile } = useProfileStore();
+    const [createState, setCreateState] = useState("Create Group");
+
+    const callCreateProfile = () => {
+        const res = createProfile();
+        if (!res) setCreateState("Failed, try again");
+    };
 
     return (
         <View>
-            <Text>Hi</Text>
             <View
                 style={{ display: "flex", flexDirection: "row", gap: 5 }}
             ></View>
@@ -22,7 +28,7 @@ export default function GroupedTimersScreen() {
             >
                 {profiles.map((profile) => (
                     <TouchableOpacity
-                        key={profile.name}
+                        key={profile.id}
                         onPress={() =>
                             router.push({
                                 pathname:
@@ -44,6 +50,19 @@ export default function GroupedTimersScreen() {
                         <Text>{profile.name}</Text>
                     </TouchableOpacity>
                 ))}
+                <TouchableOpacity
+                    onPress={callCreateProfile}
+                    style={{
+                        height: 50,
+                        flex: 1,
+                        display: "flex",
+                        justifyContent: "center",
+                        alignItems: "center",
+                        backgroundColor: "#e1e1e1",
+                    }}
+                >
+                    <Text>{createState}</Text>
+                </TouchableOpacity>
             </View>
         </View>
     );

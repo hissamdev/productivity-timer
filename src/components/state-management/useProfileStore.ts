@@ -1,3 +1,4 @@
+import { handleCreateProfile } from "@/utils/helpers";
 import { create } from "zustand";
 type Timer = {
     label: string;
@@ -10,7 +11,7 @@ type Profile = {
 
 type ProfileState = {
     profiles: Profile[];
-    setProfiles: () => void;
+    createProfile: () => Promise<void>;
 };
 
 export const useProfileStore = create<ProfileState>((set) => ({
@@ -31,7 +32,19 @@ export const useProfileStore = create<ProfileState>((set) => ({
             ],
         },
     ],
-    setProfiles: () => {
-        console.log("Set Profiles Function");
+    createProfile: async () => {
+        const res = await handleCreateProfile();
+        if (!res) {
+            return;
+        }
+
+        set((prev) => {
+            const newProfile = {
+                name: "New Profile",
+                timers: [],
+            };
+
+            return { profiles: [...prev.profiles, newProfile] };
+        });
     },
 }));

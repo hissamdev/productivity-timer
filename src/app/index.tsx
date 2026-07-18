@@ -1,12 +1,7 @@
-import { drizzle } from "drizzle-orm/expo-sqlite";
 import { useRouter } from "expo-router";
-import * as SQLite from "expo-sqlite";
 import { StyleSheet, Text, TouchableOpacity, View } from "react-native";
 
 export default function Index() {
-    const expo = SQLite.openDatabaseSync("db.db");
-    const db = drizzle(expo);
-
     const router = useRouter();
     return (
         <View
