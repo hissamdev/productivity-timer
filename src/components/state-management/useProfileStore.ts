@@ -1,16 +1,17 @@
+import { ProfileWithTimers } from "@/types/types";
 import { handleCreateProfile } from "@/utils/helpers";
 import { create } from "zustand";
-type Timer = {
-    label: string;
-};
+// type Timer = {
+//     label: string;
+// };
 
-type Profile = {
-    name: string;
-    timers: Timer[];
-};
+// type Profile = {
+//     name: string;
+//     timers: Timer[];
+// };
 
 type ProfileState = {
-    profiles: Profile[];
+    profiles: ProfileWithTimers[];
     createProfile: () => Promise<void>;
 };
 
@@ -21,7 +22,6 @@ export const useProfileStore = create<ProfileState>((set) => ({
             timers: [
                 {
                     label: "Coding",
-                    timer: 0,
                     running: false,
                 },
                 {

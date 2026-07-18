@@ -16,7 +16,7 @@ export default function TimerBox({ label }: Props) {
             timerRef.current = setInterval(() => {
                 setSeconds((prev) => prev + 1);
             }, 1000);
-        } else {
+        } else if (timerRef.current) {
             clearInterval(timerRef.current);
         }
         return () => clearInterval(timerRef.current);

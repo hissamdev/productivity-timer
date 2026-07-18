@@ -9,7 +9,7 @@ type RouteParams = {
 
 export default function TimersScreen() {
     const { profiles } = useProfileStore();
-    const params = useLocalSearchParams<RouteParams>();
+    const params = useLocalSearchParams<{ groupId: string }>();
     const currentProfile = profiles.find((p) => p.name === params.groupId);
 
     if (!currentProfile?.timers || currentProfile?.timers.length === 0) {
