@@ -1,17 +1,24 @@
-import { drizzle } from "drizzle-orm/expo-sqlite";
+import { useProfileStore } from "@/components/state-management/useProfileStore";
+import { DATABASE_NAME, db, expoDb } from "@/db/db";
 import { useMigrations } from "drizzle-orm/expo-sqlite/migrator";
-import { Stack } from "expo-router";
+import { useDrizzleStudio } from "expo-drizzle-studio-plugin";
+import { Tabs } from "expo-router";
 import * as SQLite from "expo-sqlite";
+import { useEffect } from "react";
 import { Text, View } from "react-native";
 import migrations from "../../drizzle/migrations";
 
-export const DATABASE_NAME = "timers";
-const expo = SQLite.openDatabaseSync(DATABASE_NAME);
-export const db = drizzle(expo);
-
 export default function RootLayout() {
     const { success, error } = useMigrations(db, migrations);
+    useDrizzleStudio(expoDb);
+
+    const { initProfiles } = useProfileStore();
+    useEffect(() => {
+        initProfiles();
+    }, []);
+
     if (error) {
+        console.log(error);
         return (
             <View>
                 <Text>Migration error: {error.message}</Text>
@@ -26,12 +33,18 @@ export default function RootLayout() {
             </View>
         );
     }
+
     return (
         <SQLite.SQLiteProvider
             databaseName={DATABASE_NAME}
             options={{ enableChangeListener: true }}
         >
-            <Stack />
+            <Tabs>
+                <Tabs.Screen
+                    name="index"
+                    options={{ title: "Timer Profiles" }}
+                />
+            </Tabs>
         </SQLite.SQLiteProvider>
     );
 }

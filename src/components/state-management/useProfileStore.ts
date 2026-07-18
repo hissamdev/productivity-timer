@@ -1,4 +1,5 @@
 import { ProfileWithTimers } from "@/types/types";
+import { getProfiles } from "@/utils/getFunctions";
 import { handleCreateProfile } from "@/utils/helpers";
 import { create } from "zustand";
 // type Timer = {
@@ -12,26 +13,21 @@ import { create } from "zustand";
 
 type ProfileState = {
     profiles: ProfileWithTimers[];
+    initProfiles: () => void;
     createProfile: () => Promise<void>;
 };
 
 export const useProfileStore = create<ProfileState>((set) => ({
-    profiles: [
-        {
-            name: "Multitask",
-            timers: [
-                {
-                    label: "Coding",
-                    running: false,
-                },
-                {
-                    label: "Valorant",
-                    timer: 0,
-                    running: false,
-                },
-            ],
-        },
-    ],
+    profiles: [],
+    initProfiles: async () => {
+        const profileData = await getProfiles();
+
+        if (!profileData) {
+            console.log(profileData);
+            return;
+        }
+        set({ profiles: profileData });
+    },
     createProfile: async () => {
         const res = await handleCreateProfile();
         if (!res) {
@@ -40,6 +36,7 @@ export const useProfileStore = create<ProfileState>((set) => ({
 
         set((prev) => {
             const newProfile = {
+                id: res[0].id,
                 name: "New Profile",
                 timers: [],
             };

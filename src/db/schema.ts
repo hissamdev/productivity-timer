@@ -6,7 +6,7 @@ export const timerProfilesTable = sqliteTable("timer_profiles", {
     id: text("id")
         .primaryKey()
         .$defaultFn(() => createId()),
-    name: text("name").notNull(),
+    name: text("name").notNull().default("New Profile"),
 });
 
 export const timerTable = sqliteTable("timer", {
