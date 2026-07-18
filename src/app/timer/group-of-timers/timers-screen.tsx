@@ -1,19 +1,18 @@
+import { useProfileStore } from "@/components/state-management/useProfileStore";
 import TimerBox from "@/components/timer-box";
 import { useLocalSearchParams } from "expo-router";
 import { Text, View } from "react-native";
 
 type RouteParams = {
-    timers: string;
+    groupId: string;
 };
 
-type Timers = {
-    label: string;
-}[];
-
 export default function TimersScreen() {
+    const { profiles } = useProfileStore();
     const params = useLocalSearchParams<RouteParams>();
-    const timers: Timers = JSON.parse(params.timers);
-    if (!timers || timers.length === 0) {
+    const currentProfile = profiles.find((p) => p.name === params.groupId);
+
+    if (!currentProfile?.timers || currentProfile?.timers.length === 0) {
         return <Text>No Timers</Text>;
     }
 
@@ -30,7 +29,7 @@ export default function TimersScreen() {
                 // borderWidth: 2,
             }}
         >
-            {timers.map((timer) => (
+            {currentProfile.timers.map((timer) => (
                 <TimerBox key={timer.label} label={timer.label}></TimerBox>
             ))}
         </View>

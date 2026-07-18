@@ -1,26 +1,10 @@
+import { useProfileStore } from "@/components/state-management/useProfileStore";
 import { useRouter } from "expo-router";
-import { useState } from "react";
 import { Text, TouchableOpacity, View } from "react-native";
 
 export default function GroupedTimersScreen() {
     const router = useRouter();
-    const [timerGroups, setTimerGroups] = useState([
-        {
-            name: "Multitask",
-            timers: [
-                {
-                    label: "Coding",
-                    timer: 0,
-                    running: false,
-                },
-                {
-                    label: "Valorant",
-                    timer: 0,
-                    running: false,
-                },
-            ],
-        },
-    ]);
+    const { profiles } = useProfileStore();
 
     return (
         <View>
@@ -36,15 +20,15 @@ export default function GroupedTimersScreen() {
                     gap: 10,
                 }}
             >
-                {timerGroups.map((group) => (
+                {profiles.map((profile) => (
                     <TouchableOpacity
-                        key={group.name}
+                        key={profile.name}
                         onPress={() =>
                             router.push({
                                 pathname:
                                     "/timer/group-of-timers/timers-screen",
                                 params: {
-                                    timers: JSON.stringify(group.timers),
+                                    groupId: profile.name,
                                 },
                             })
                         }
@@ -57,7 +41,7 @@ export default function GroupedTimersScreen() {
                             backgroundColor: "#e1e1e1",
                         }}
                     >
-                        <Text>{group.name}</Text>
+                        <Text>{profile.name}</Text>
                     </TouchableOpacity>
                 ))}
             </View>
