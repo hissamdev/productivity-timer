@@ -31,8 +31,7 @@ export default function GroupedTimersScreen() {
                         key={profile.id}
                         onPress={() =>
                             router.push({
-                                pathname:
-                                    "/timer/group-of-timers/timers-screen",
+                                pathname: "/timer/group-of-timers/timer-screen",
                                 params: {
                                     groupId: profile.name,
                                 },

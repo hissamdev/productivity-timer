@@ -23,7 +23,8 @@ export const timerDataTable = sqliteTable("timer_data", {
         .primaryKey()
         .$defaultFn(() => createId()),
     timerId: text("timer_id").notNull(),
-    dataType: text("data_type").notNull(), // start | pause | reset
+    type: text("data_type").notNull().$type<"start" | "pause" | "reset">(), // start | pause | reset
+    timestamp: integer("timestamp", { mode: "timestamp" }),
 });
 
 export const relations = defineRelations(
