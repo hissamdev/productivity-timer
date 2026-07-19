@@ -2,7 +2,7 @@ import { useProfileStore } from "@/components/state-management/useProfileStore";
 import { DATABASE_NAME, db, expoDb } from "@/db/db";
 import { useMigrations } from "drizzle-orm/expo-sqlite/migrator";
 import { useDrizzleStudio } from "expo-drizzle-studio-plugin";
-import { Tabs } from "expo-router";
+import { Stack } from "expo-router";
 import * as SQLite from "expo-sqlite";
 import { useEffect } from "react";
 import { Text, View } from "react-native";
@@ -39,12 +39,7 @@ export default function RootLayout() {
             databaseName={DATABASE_NAME}
             options={{ enableChangeListener: true }}
         >
-            <Tabs>
-                <Tabs.Screen
-                    name="index"
-                    options={{ title: "Timer Profiles" }}
-                />
-            </Tabs>
+            <Stack screenOptions={{ headerShown: false }} />
         </SQLite.SQLiteProvider>
     );
 }
