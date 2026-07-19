@@ -7,6 +7,10 @@ export const timerProfilesTable = sqliteTable("timer_profiles", {
         .primaryKey()
         .$defaultFn(() => createId()),
     name: text("name").notNull().default("New Profile"),
+    desc: text("desc"),
+    lastUsed: integer("last_used", { mode: "timestamp" }).$defaultFn(
+        () => new Date(),
+    ),
 });
 
 export const timerTable = sqliteTable("timer", {

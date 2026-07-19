@@ -1,0 +1,170 @@
+{
+  "version": "7",
+  "dialect": "sqlite",
+  "id": "19c40a23-d25e-4d1f-8e16-a8f521a9e307",
+  "prevIds": [
+    "72725adc-cce5-4b9c-80d8-c15ae6f01873"
+  ],
+  "ddl": [
+    {
+      "name": "timer_data",
+      "entityType": "tables"
+    },
+    {
+      "name": "timer_profiles",
+      "entityType": "tables"
+    },
+    {
+      "name": "timer",
+      "entityType": "tables"
+    },
+    {
+      "type": "text",
+      "notNull": false,
+      "autoincrement": false,
+      "default": null,
+      "generated": null,
+      "name": "id",
+      "entityType": "columns",
+      "table": "timer_data"
+    },
+    {
+      "type": "text",
+      "notNull": true,
+      "autoincrement": false,
+      "default": null,
+      "generated": null,
+      "name": "timer_id",
+      "entityType": "columns",
+      "table": "timer_data"
+    },
+    {
+      "type": "text",
+      "notNull": true,
+      "autoincrement": false,
+      "default": null,
+      "generated": null,
+      "name": "data_type",
+      "entityType": "columns",
+      "table": "timer_data"
+    },
+    {
+      "type": "integer",
+      "notNull": false,
+      "autoincrement": false,
+      "default": null,
+      "generated": null,
+      "name": "timestamp",
+      "entityType": "columns",
+      "table": "timer_data"
+    },
+    {
+      "type": "text",
+      "notNull": false,
+      "autoincrement": false,
+      "default": null,
+      "generated": null,
+      "name": "id",
+      "entityType": "columns",
+      "table": "timer_profiles"
+    },
+    {
+      "type": "text",
+      "notNull": true,
+      "autoincrement": false,
+      "default": "'New Profile'",
+      "generated": null,
+      "name": "name",
+      "entityType": "columns",
+      "table": "timer_profiles"
+    },
+    {
+      "type": "text",
+      "notNull": false,
+      "autoincrement": false,
+      "default": null,
+      "generated": null,
+      "name": "desc",
+      "entityType": "columns",
+      "table": "timer_profiles"
+    },
+    {
+      "type": "integer",
+      "notNull": false,
+      "autoincrement": false,
+      "default": null,
+      "generated": null,
+      "name": "last_used",
+      "entityType": "columns",
+      "table": "timer_profiles"
+    },
+    {
+      "type": "text",
+      "notNull": false,
+      "autoincrement": false,
+      "default": null,
+      "generated": null,
+      "name": "id",
+      "entityType": "columns",
+      "table": "timer"
+    },
+    {
+      "type": "text",
+      "notNull": true,
+      "autoincrement": false,
+      "default": null,
+      "generated": null,
+      "name": "profile_id",
+      "entityType": "columns",
+      "table": "timer"
+    },
+    {
+      "type": "text",
+      "notNull": true,
+      "autoincrement": false,
+      "default": "''",
+      "generated": null,
+      "name": "label",
+      "entityType": "columns",
+      "table": "timer"
+    },
+    {
+      "type": "integer",
+      "notNull": true,
+      "autoincrement": false,
+      "default": "false",
+      "generated": null,
+      "name": "running",
+      "entityType": "columns",
+      "table": "timer"
+    },
+    {
+      "columns": [
+        "id"
+      ],
+      "nameExplicit": false,
+      "name": "timer_data_pk",
+      "table": "timer_data",
+      "entityType": "pks"
+    },
+    {
+      "columns": [
+        "id"
+      ],
+      "nameExplicit": false,
+      "name": "timer_profiles_pk",
+      "table": "timer_profiles",
+      "entityType": "pks"
+    },
+    {
+      "columns": [
+        "id"
+      ],
+      "nameExplicit": false,
+      "name": "timer_pk",
+      "table": "timer",
+      "entityType": "pks"
+    }
+  ],
+  "renames": []
+}
