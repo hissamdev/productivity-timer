@@ -1,5 +1,6 @@
 import { useProfileStore } from "@/components/state-management/useProfileStore";
 import { useRouter } from "expo-router";
+import { EllipsisVertical } from "lucide-react-native";
 import { useState } from "react";
 import { ScrollView, Text, TouchableOpacity, View } from "react-native";
 
@@ -15,13 +16,14 @@ export default function Index() {
 
     return (
         <ScrollView>
-            <View style={{ margin: 10 }}>
+            <View style={{ marginTop: 40, marginHorizontal: 15 }}>
                 <Text style={{ marginTop: 30, fontSize: 20 }}>
                     Timer Profiles
                 </Text>
+                <Text>Profiles of timers</Text>
                 <View
                     style={{
-                        marginTop: 10,
+                        marginTop: 20,
                         display: "flex",
                         gap: 10,
                     }}
@@ -42,16 +44,64 @@ export default function Index() {
                                     })
                                 }
                                 style={{
-                                    height: 50,
+                                    paddingVertical: 18,
+                                    paddingHorizontal: 18,
+                                    minHeight: 120,
                                     display: "flex",
-                                    justifyContent: "center",
-                                    alignItems: "center",
+                                    justifyContent: "space-between",
                                     borderWidth: 1,
-                                    borderColor: "black",
-                                    borderRadius: 8,
+                                    borderColor: "#00000024",
+                                    borderRadius: 6,
                                 }}
                             >
-                                <Text>{profile.name}</Text>
+                                <View
+                                    style={{
+                                        display: "flex",
+                                        flexDirection: "row",
+                                        justifyContent: "space-between",
+                                    }}
+                                >
+                                    <View>
+                                        <Text
+                                            style={{
+                                                fontSize: 17,
+                                                fontWeight: 600,
+                                            }}
+                                        >
+                                            {profile.name}
+                                        </Text>
+                                        {profile.desc && (
+                                            <Text>{profile.desc}</Text>
+                                        )}
+                                    </View>
+                                    <View>
+                                        <EllipsisVertical
+                                            size={18}
+                                            style={{ marginRight: -5 }}
+                                        />
+                                    </View>
+                                </View>
+
+                                <View
+                                    style={{
+                                        display: "flex",
+                                        flexDirection: "row",
+                                        justifyContent: "space-between",
+                                        alignItems: "flex-end",
+                                    }}
+                                >
+                                    <Text style={{ fontSize: 12 }}>
+                                        2 Timers Coding, Gaming
+                                    </Text>
+                                    <Text
+                                        style={{
+                                            fontSize: 10,
+                                            fontStyle: "italic",
+                                        }}
+                                    >
+                                        Last Used: 05 mins ago
+                                    </Text>
+                                </View>
                             </TouchableOpacity>
                         ))
                     )}
