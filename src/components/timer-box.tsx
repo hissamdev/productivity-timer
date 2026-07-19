@@ -1,11 +1,13 @@
+import { handleTimerData } from "@/utils/timerDataSetters";
 import { CodeXml } from "lucide-react-native";
 import { useEffect, useRef, useState } from "react";
 import { Text, TouchableOpacity, View } from "react-native";
 
 type Props = {
     label: string;
+    timerId: string;
 };
-export default function TimerBox({ label }: Props) {
+export default function TimerBox({ label, timerId }: Props) {
     const [timerState, setTimerState] = useState<
         "initial" | "running" | "paused"
     >("initial");
@@ -30,6 +32,21 @@ export default function TimerBox({ label }: Props) {
 
         return `${mins}:${secs}`;
     };
+    const handleTimerPress = async () => {
+        if (timerState === "initial") {
+            const res = await handleTimerData(timerId, "start");
+            if (!res) return;
+            setTimerState("running");
+        } else if (timerState === "running") {
+            const res = await handleTimerData(timerId, "pause");
+            if (!res) return;
+            setTimerState("paused");
+        } else {
+            const res = await handleTimerData(timerId, "resume");
+            if (!res) return;
+            setTimerState("running");
+        }
+    };
 
     return (
         <View
@@ -42,18 +59,18 @@ export default function TimerBox({ label }: Props) {
                 gap: 10,
             }}
         >
-            <CodeXml />
-            <Text style={{ fontSize: 20 }}>{label}</Text>
+            <View style={{}}>
+                <CodeXml />
+                <Text
+                    style={{
+                        fontSize: 20,
+                    }}
+                >
+                    {label}
+                </Text>
+            </View>
             <TouchableOpacity
-                onPress={() =>
-                    setTimerState((prev) =>
-                        prev === "initial"
-                            ? "running"
-                            : prev === "running"
-                              ? "paused"
-                              : "running",
-                    )
-                }
+                onPress={handleTimerPress}
                 style={{
                     height: 100,
                     backgroundColor: "#ffffff96",

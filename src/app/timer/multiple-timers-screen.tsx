@@ -8,11 +8,12 @@ export default function TimersScreen() {
     const params = useLocalSearchParams<{ groupId: string }>();
     const currentProfile = profiles.find((p) => p.name === params.groupId);
     if (!currentProfile) {
-        return <Text>Profile was not found</Text>;
+        console.error("Profile was not found");
+        return <Text>Error: Profile was not found</Text>;
     }
 
     const callCreateTimer = async () => {
-        const res = await createTimer(currentProfile.id);
+        await createTimer(currentProfile.id);
     };
 
     if (currentProfile.timers.length === 0) {
@@ -41,7 +42,11 @@ export default function TimersScreen() {
             }}
         >
             {currentProfile.timers.map((timer) => (
-                <TimerBox key={timer.label} label={timer.label}></TimerBox>
+                <TimerBox
+                    key={timer.id}
+                    label={timer.label}
+                    timerId={timer.id}
+                ></TimerBox>
             ))}
         </View>
     );
