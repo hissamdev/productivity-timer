@@ -1,19 +1,30 @@
 import { useProfileStore } from "@/components/state-management/useProfileStore";
 import TimerBox from "@/components/timer-box";
 import { useLocalSearchParams } from "expo-router";
-import { Text, View } from "react-native";
-
-type RouteParams = {
-    groupId: string;
-};
+import { Text, TouchableOpacity, View } from "react-native";
 
 export default function TimersScreen() {
-    const { profiles } = useProfileStore();
+    const { profiles, createTimer } = useProfileStore();
     const params = useLocalSearchParams<{ groupId: string }>();
     const currentProfile = profiles.find((p) => p.name === params.groupId);
+    if (!currentProfile) {
+        return <Text>Profile was not found</Text>;
+    }
 
-    if (!currentProfile?.timers || currentProfile?.timers.length === 0) {
-        return <Text>No Timers</Text>;
+    const callCreateTimer = async () => {
+        const res = await createTimer(currentProfile.id);
+    };
+
+    if (currentProfile.timers.length === 0) {
+        return (
+            <View
+                style={{ marginTop: 200, borderWidth: 1, borderColor: "black" }}
+            >
+                <TouchableOpacity onPress={callCreateTimer}>
+                    <Text>Create timer</Text>
+                </TouchableOpacity>
+            </View>
+        );
     }
 
     return (

@@ -15,7 +15,7 @@ export default function MultiScreen() {
             }}
         >
             <TouchableOpacity
-                onPress={() => router.push("/timer/timer-single-screen")}
+                onPress={() => router.push("/timer-single-screen")}
                 style={[
                     {
                         justifyContent: "center",
@@ -30,7 +30,7 @@ export default function MultiScreen() {
                 <Text>Timer</Text>
             </TouchableOpacity>
             <TouchableOpacity
-                onPress={() => router.push("/timer/timer-profiles-screen")}
+                onPress={() => router.push("/timer/multiple-timers-screen")}
                 style={[
                     {
                         justifyContent: "center",

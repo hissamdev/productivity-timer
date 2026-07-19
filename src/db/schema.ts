@@ -28,16 +28,23 @@ export const timerDataTable = sqliteTable("timer_data", {
 });
 
 export const relations = defineRelations(
-    { timerProfilesTable, timerTable },
+    { timerProfilesTable, timerTable, timerDataTable },
     (r) => ({
+        timerProfilesTable: {
+            timers: r.many.timerTable(),
+        },
         timerTable: {
             profile: r.one.timerProfilesTable({
                 from: r.timerTable.profileId,
                 to: r.timerProfilesTable.id,
             }),
+            data: r.many.timerDataTable(),
         },
-        timerProfilesTable: {
-            timers: r.many.timerTable(),
+        timerDataTable: {
+            timer: r.one.timerTable({
+                from: r.timerDataTable.timerId,
+                to: r.timerTable.id,
+            }),
         },
     }),
 );

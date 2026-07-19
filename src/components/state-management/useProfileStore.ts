@@ -1,20 +1,13 @@
 import { ProfileWithTimers } from "@/types/types";
 import { getProfiles } from "@/utils/getFunctions";
-import { handleCreateProfile } from "@/utils/helpers";
+import { handleCreateProfile, handleCreateTimer } from "@/utils/helpers";
 import { create } from "zustand";
-// type Timer = {
-//     label: string;
-// };
-
-// type Profile = {
-//     name: string;
-//     timers: Timer[];
-// };
 
 type ProfileState = {
     profiles: ProfileWithTimers[];
     initProfiles: () => void;
     createProfile: () => Promise<void>;
+    createTimer: (profileId: string) => Promise<void>;
 };
 
 export const useProfileStore = create<ProfileState>((set) => ({
@@ -37,11 +30,25 @@ export const useProfileStore = create<ProfileState>((set) => ({
         set((prev) => {
             const newProfile = {
                 id: res[0].id,
-                name: "New Profile",
+                name: res[0].name,
                 timers: [],
             };
 
             return { profiles: [...prev.profiles, newProfile] };
         });
+    },
+    createTimer: async (profileId) => {
+        const res = await handleCreateTimer(profileId);
+        if (!res) return;
+        set((prev) => ({
+            profiles: prev.profiles.map((profile) =>
+                profile.id === profileId
+                    ? {
+                          ...profile,
+                          timers: [...profile.timers, res[0]],
+                      }
+                    : profile,
+            ),
+        }));
     },
 }));

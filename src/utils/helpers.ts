@@ -1,5 +1,5 @@
 import { db } from "@/db/db";
-import { timerProfilesTable } from "@/db/schema";
+import { timerProfilesTable, timerTable } from "@/db/schema";
 
 export async function handleCreateProfile() {
     try {
@@ -16,5 +16,22 @@ export async function handleCreateProfile() {
     } catch (err) {
         console.log(err);
         return null;
+    }
+}
+
+export async function handleCreateTimer(profileId: string) {
+    try {
+        const res = await db
+            .insert(timerTable)
+            .values({
+                profileId,
+                label: "New Timer",
+            })
+            .returning();
+        if (!res) return;
+        return res;
+    } catch (err) {
+        console.error(err);
+        return;
     }
 }
