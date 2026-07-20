@@ -1,13 +1,16 @@
+import { TimerWithData } from "@/types/types";
 import { handleTimerData } from "@/utils/timerDataSetters";
 import { CodeXml } from "lucide-react-native";
 import { useEffect, useRef, useState } from "react";
 import { Text, TouchableOpacity, View } from "react-native";
+import { useProfileStore } from "./state-management/useProfileStore";
 
 type Props = {
-    label: string;
-    timerId: string;
+    groupId: string;
+    timer: TimerWithData;
 };
-export default function TimerBox({ label, timerId }: Props) {
+export default function TimerBox({ groupId, timer }: Props) {
+    const { updateData, setTimerRunning } = useProfileStore();
     const [timerState, setTimerState] = useState<
         "initial" | "running" | "paused"
     >("initial");
@@ -32,19 +35,32 @@ export default function TimerBox({ label, timerId }: Props) {
 
         return `${mins}:${secs}`;
     };
+
     const handleTimerPress = async () => {
-        if (timerState === "initial") {
-            const res = await handleTimerData(timerId, "start");
-            if (!res) return;
-            setTimerState("running");
-        } else if (timerState === "running") {
-            const res = await handleTimerData(timerId, "pause");
-            if (!res) return;
-            setTimerState("paused");
-        } else {
-            const res = await handleTimerData(timerId, "resume");
-            if (!res) return;
-            setTimerState("running");
+        if (
+            !timer.running ||
+            !timer.data.length ||
+            timer.data[0].type === "reset"
+        ) {
+            console.log("Start detected:", timer.running, timer.data);
+            const res = await handleTimerData(timer.id, "start");
+            if (!res?.length) return;
+
+            setTimerRunning(groupId, timer.id, true);
+            updateData(groupId, timer.id, res[0]);
+        } else if (
+            timer.data[0].type === "start" ||
+            timer.data[0].type === "resume"
+        ) {
+            const res = await handleTimerData(timer.id, "pause");
+            if (!res?.length) return;
+
+            updateData(groupId, timer.id, res[0]);
+        } else if (timer.data[0].type === "pause") {
+            const res = await handleTimerData(timer.id, "resume");
+            if (!res?.length) return;
+
+            updateData(groupId, timer.id, res[0]);
         }
     };
 
@@ -66,7 +82,7 @@ export default function TimerBox({ label, timerId }: Props) {
                         fontSize: 20,
                     }}
                 >
-                    {label}
+                    {timer.label}
                 </Text>
             </View>
             <TouchableOpacity
@@ -85,7 +101,7 @@ export default function TimerBox({ label, timerId }: Props) {
                         ? "Start"
                         : formatSeconds(seconds)}
                 </Text>
-                <Text>{timerState}</Text>
+                <Text>{timer.data?.[0]?.type}</Text>
             </TouchableOpacity>
         </View>
     );

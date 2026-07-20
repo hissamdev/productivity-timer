@@ -44,8 +44,8 @@ export default function TimersScreen() {
             {currentProfile.timers.map((timer) => (
                 <TimerBox
                     key={timer.id}
-                    label={timer.label}
-                    timerId={timer.id}
+                    groupId={currentProfile.id}
+                    timer={timer}
                 />
             ))}
         </View>

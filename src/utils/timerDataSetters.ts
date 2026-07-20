@@ -1,10 +1,21 @@
 import { db } from "@/db/db";
-import { timerDataTable } from "@/db/schema";
+import { timerDataTable, timerTable } from "@/db/schema";
 
 export async function handleTimerData(
     timerId: string,
     type: "start" | "pause" | "resume" | "reset",
 ) {
+    if (type === "start") {
+        try {
+            await db.update(timerTable).set({
+                running: true,
+            });
+        } catch (err) {
+            console.error(err);
+            return;
+        }
+    }
+
     try {
         const res = await db
             .insert(timerDataTable)
@@ -15,6 +26,7 @@ export async function handleTimerData(
             })
             .returning();
         if (!res) return;
+
         return res;
     } catch (err) {
         console.error(err);
