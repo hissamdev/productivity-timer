@@ -34,17 +34,40 @@ export default function TimersScreen() {
         <View
             style={{
                 marginTop: 100,
+                marginHorizontal: 20,
             }}
         >
-            <Text>Group of Timers</Text>
-            <Text>{currentProfile.name}</Text>
-            {currentProfile.timers.map((timer) => (
-                <TimerBox
-                    key={timer.id}
-                    groupId={currentProfile.id}
-                    timer={timer}
-                />
-            ))}
+            <Text
+                style={{
+                    fontSize: 14,
+                    textTransform: "uppercase",
+                    color: "#858585",
+                    letterSpacing: 1.2,
+                }}
+            >
+                Group of Timers
+            </Text>
+            <Text
+                style={{
+                    marginTop: 10,
+                    fontSize: 22,
+                }}
+            >
+                {currentProfile.name}
+            </Text>
+            <View
+                style={{
+                    marginTop: 20,
+                }}
+            >
+                {currentProfile.timers.map((timer) => (
+                    <TimerBox
+                        key={timer.id}
+                        groupId={currentProfile.id}
+                        timer={timer}
+                    />
+                ))}
+            </View>
         </View>
     );
 }

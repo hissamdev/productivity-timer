@@ -12,10 +12,8 @@ export async function handleTimerData(
     // on "resume" do same as above, but store it in paused_total
     // on "reset", if last one was pause, then save it to pause total
     const currentTime = new Date();
-    const elapsed =
-        (new Date().getTime() - lastData?.timestamp.getTime()) / 1000;
-
-    if (type === "start") {
+    if (!lastData) {
+        console.log("Start detected");
         try {
             const res = await db
                 .insert(timerDataTable)
@@ -32,6 +30,13 @@ export async function handleTimerData(
             console.error(err);
             return;
         }
+    }
+
+    const elapsed =
+        (currentTime.getTime() - lastData?.timestamp.getTime()) / 1000;
+
+    if (type === "start") {
+        console.log("Start detected");
     } else if (type === "pause") {
         try {
             const res = await db

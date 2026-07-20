@@ -1,8 +1,7 @@
 import { TimerWithData } from "@/types/types";
 import { handleTimerData } from "@/utils/timerDataSetters";
-import { CodeXml } from "lucide-react-native";
 import { useEffect, useRef, useState } from "react";
-import { Text, TouchableOpacity, View } from "react-native";
+import { StyleSheet, Text, TouchableOpacity, View } from "react-native";
 import { useProfileStore } from "./state-management/useProfileStore";
 
 type Props = {
@@ -11,26 +10,47 @@ type Props = {
 };
 export default function TimerBox({ groupId, timer }: Props) {
     const { updateData, setTimerRunning } = useProfileStore();
+    const [seconds, setSeconds] = useState(0);
     const [timerState, setTimerState] = useState<
         "initial" | "running" | "paused"
     >("initial");
 
     const isInitial = !timer.data.length || timer.data[0].type === "reset";
     const isContinue =
-        timer.data[0].type === "start" || timer.data[0].type === "resume";
-    const isPaused = timer.data[0].type === "pause";
+        timer.data?.[0]?.type === "start" || timer.data?.[0]?.type === "resume";
+    const isPaused = timer.data?.[0]?.type === "pause";
+    console.log({
+        initial: isInitial,
+        continue: isContinue,
+        paused: isPaused,
+    });
 
-    const [seconds, setSeconds] = useState(0);
     const timerRef = useRef<ReturnType<typeof setInterval> | null>(null);
     useEffect(() => {
+        if (isContinue) {
+            const updateElapsedSeconds = () => {
+                const currentTime = new Date();
+                const elapsedLast =
+                    (currentTime.getTime() -
+                        timer.data[0].timestamp.getTime()) /
+                    1000;
+                const elapsedTotal = elapsedLast + timer.data[0].elapsedTotal;
+                setSeconds(elapsedTotal);
+            };
+            updateElapsedSeconds();
+            timerRef.current = setInterval(updateElapsedSeconds, 1000);
+        }
+
         return () => clearInterval(timerRef.current);
-    }, []);
+    }, [isContinue]);
 
     const formatSeconds = (rawSeconds: number) => {
         const mins = Math.floor((rawSeconds / 60) % 60)
             .toString()
             .padStart(2, "0");
-        const secs = (rawSeconds % 60).toString().padStart(2, "0");
+        const secs = Math.floor(rawSeconds % 60)
+            .toString()
+            .padStart(2, "0");
 
         return `${mins}:${secs}`;
     };
@@ -61,47 +81,73 @@ export default function TimerBox({ groupId, timer }: Props) {
     };
 
     return (
-        <View
-            style={{
-                // borderWidth: 2,
-                // borderColor: "black",
-                // height: 100,
-                display: "flex",
-                flex: 1,
-                gap: 10,
-            }}
-        >
-            <View style={{}}>
-                <CodeXml />
+        <View>
+            <View style={styles.pausedText}>
                 <Text
                     style={{
-                        fontSize: 20,
+                        textAlign: "center",
                     }}
                 >
-                    {timer.label}
+                    Paused for: {formatSeconds(timer?.data?.[0]?.pausedTotal)}
                 </Text>
             </View>
+
             <TouchableOpacity
                 onPress={handleTimerPress}
-                style={{
-                    height: 100,
-                    backgroundColor: "#ffffff96",
-                    borderRadius: 5,
-                    display: "flex",
-                    justifyContent: "center",
-                    alignItems: "center",
-                }}
+                style={styles.timerContainer}
             >
+                <Text style={{ marginTop: 16 }}>{timer.label}</Text>
                 <Text style={{ fontSize: 30 }}>
-                    {timerState === "initial"
-                        ? "Start"
-                        : formatSeconds(seconds)}
+                    {isPaused ? "Paused" : formatSeconds(seconds)}
                 </Text>
-                <Text>
-                    {timer.data?.[0]?.type} {timer.data[0].elapsedTotal}{" "}
-                    {timer.data[0].pausedTotal}
-                </Text>
+                <TouchableOpacity style={styles.stopCircle}>
+                    <View
+                        style={{
+                            aspectRatio: 1 / 1,
+                            width: 10,
+                            backgroundColor: "black",
+                        }}
+                    ></View>
+                </TouchableOpacity>
             </TouchableOpacity>
         </View>
     );
 }
+
+const styles = StyleSheet.create({
+    timerContainer: {
+        marginTop: 20,
+        marginHorizontal: "auto",
+        display: "flex",
+        justifyContent: "center",
+        alignItems: "center",
+        gap: 10,
+        aspectRatio: 1 / 1,
+        width: 200,
+        borderWidth: 2,
+        borderColor: "black",
+        borderRadius: "100%",
+    },
+
+    stopCircle: {
+        aspectRatio: 1 / 1,
+        width: 40,
+        display: "flex",
+        justifyContent: "center",
+        alignItems: "center",
+        borderWidth: 1,
+        borderColor: "#E0E0E0",
+        borderRadius: "100%",
+    },
+    pausedText: {
+        marginHorizontal: "auto",
+        paddingVertical: 2,
+        paddingHorizontal: 18,
+        borderRadius: 18,
+        backgroundColor: "#EBEBEB",
+    },
+    debugBorder: {
+        borderWidth: 1,
+        borderColor: "black",
+    },
+});
