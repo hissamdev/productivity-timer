@@ -46,7 +46,7 @@ export default function Index() {
                                 style={{
                                     paddingVertical: 18,
                                     paddingHorizontal: 18,
-                                    minHeight: 120,
+                                    minHeight: 90,
                                     display: "flex",
                                     justifyContent: "space-between",
                                     borderWidth: 1,
@@ -71,7 +71,9 @@ export default function Index() {
                                             {profile.name}
                                         </Text>
                                         {profile.desc && (
-                                            <Text>{profile.desc}</Text>
+                                            <Text style={{ marginBottom: 20 }}>
+                                                {profile.desc}
+                                            </Text>
                                         )}
                                     </View>
                                     <View>
