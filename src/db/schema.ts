@@ -31,6 +31,8 @@ export const timerDataTable = sqliteTable("timer_data", {
         .notNull()
         .$type<"start" | "pause" | "resume" | "reset">(),
     timestamp: integer("timestamp", { mode: "timestamp" }),
+    elapsedTotal: integer("elapsed_total", { mode: "timestamp" }),
+    pausedTotal: integer("paused_total", { mode: "timestamp" }),
 });
 
 export const relations = defineRelations(

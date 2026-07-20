@@ -17,15 +17,8 @@ export default function TimerBox({ groupId, timer }: Props) {
     const [seconds, setSeconds] = useState(0);
     const timerRef = useRef<ReturnType<typeof setInterval> | null>(null);
     useEffect(() => {
-        if (timerState === "running") {
-            timerRef.current = setInterval(() => {
-                setSeconds((prev) => prev + 1);
-            }, 1000);
-        } else if (timerRef.current) {
-            clearInterval(timerRef.current);
-        }
         return () => clearInterval(timerRef.current);
-    }, [timerState]);
+    }, []);
 
     const formatSeconds = (rawSeconds: number) => {
         const mins = Math.floor((rawSeconds / 60) % 60)
