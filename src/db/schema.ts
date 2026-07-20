@@ -30,9 +30,11 @@ export const timerDataTable = sqliteTable("timer_data", {
     type: text("data_type")
         .notNull()
         .$type<"start" | "pause" | "resume" | "reset">(),
-    timestamp: integer("timestamp", { mode: "timestamp" }),
-    elapsedTotal: integer("elapsed_total", { mode: "timestamp" }),
-    pausedTotal: integer("paused_total", { mode: "timestamp" }),
+    timestamp: integer("timestamp", { mode: "timestamp" })
+        .notNull()
+        .$defaultFn(() => new Date()),
+    elapsedTotal: integer("elapsed_total").notNull(),
+    pausedTotal: integer("paused_total").notNull(),
 });
 
 export const relations = defineRelations(

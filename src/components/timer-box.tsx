@@ -14,6 +14,12 @@ export default function TimerBox({ groupId, timer }: Props) {
     const [timerState, setTimerState] = useState<
         "initial" | "running" | "paused"
     >("initial");
+
+    const isInitial = !timer.data.length || timer.data[0].type === "reset";
+    const isContinue =
+        timer.data[0].type === "start" || timer.data[0].type === "resume";
+    const isPaused = timer.data[0].type === "pause";
+
     const [seconds, setSeconds] = useState(0);
     const timerRef = useRef<ReturnType<typeof setInterval> | null>(null);
     useEffect(() => {
@@ -30,28 +36,25 @@ export default function TimerBox({ groupId, timer }: Props) {
     };
 
     const handleTimerPress = async () => {
-        if (
-            !timer.running ||
-            !timer.data.length ||
-            timer.data[0].type === "reset"
-        ) {
+        if (isInitial) {
             console.log("Start detected:", timer.running, timer.data);
-            const res = await handleTimerData(timer.id, "start");
-            if (!res?.length) return;
+            const res = await handleTimerData(timer.id, "start", timer.data[0]);
+            if (!res) return;
 
             setTimerRunning(groupId, timer.id, true);
             updateData(groupId, timer.id, res[0]);
-        } else if (
-            timer.data[0].type === "start" ||
-            timer.data[0].type === "resume"
-        ) {
-            const res = await handleTimerData(timer.id, "pause");
-            if (!res?.length) return;
+        } else if (isContinue) {
+            const res = await handleTimerData(timer.id, "pause", timer.data[0]);
+            if (!res) return;
 
             updateData(groupId, timer.id, res[0]);
-        } else if (timer.data[0].type === "pause") {
-            const res = await handleTimerData(timer.id, "resume");
-            if (!res?.length) return;
+        } else if (isPaused) {
+            const res = await handleTimerData(
+                timer.id,
+                "resume",
+                timer.data[0],
+            );
+            if (!res) return;
 
             updateData(groupId, timer.id, res[0]);
         }
@@ -94,7 +97,10 @@ export default function TimerBox({ groupId, timer }: Props) {
                         ? "Start"
                         : formatSeconds(seconds)}
                 </Text>
-                <Text>{timer.data?.[0]?.type}</Text>
+                <Text>
+                    {timer.data?.[0]?.type} {timer.data[0].elapsedTotal}{" "}
+                    {timer.data[0].pausedTotal}
+                </Text>
             </TouchableOpacity>
         </View>
     );

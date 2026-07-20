@@ -5,6 +5,7 @@ import m0001 from './20260718224926_lovely_thor_girl/migration.sql';
 import m0002 from './20260718225715_boring_sauron/migration.sql';
 import m0003 from './20260719182327_curvy_vision/migration.sql';
 import m0004 from './20260720151137_worthless_natasha_romanoff/migration.sql';
+import m0005 from './20260720180519_green_korg/migration.sql';
 
   export default {
     migrations: {
@@ -12,7 +13,8 @@ import m0004 from './20260720151137_worthless_natasha_romanoff/migration.sql';
 "20260718224926_lovely_thor_girl": m0001,
 "20260718225715_boring_sauron": m0002,
 "20260719182327_curvy_vision": m0003,
-"20260720151137_worthless_natasha_romanoff": m0004
+"20260720151137_worthless_natasha_romanoff": m0004,
+"20260720180519_green_korg": m0005
 }
   }
   

@@ -4,9 +4,11 @@ import { useLocalSearchParams } from "expo-router";
 import { Text, TouchableOpacity, View } from "react-native";
 
 export default function TimersScreen() {
-    const { profiles, createTimer } = useProfileStore();
     const params = useLocalSearchParams<{ groupId: string }>();
+    // Get profile based on id
+    const { profiles, createTimer } = useProfileStore();
     const currentProfile = profiles.find((p) => p.name === params.groupId);
+
     if (!currentProfile) {
         console.error("Profile was not found");
         return <Text>Error: Profile was not found</Text>;
@@ -31,16 +33,11 @@ export default function TimersScreen() {
     return (
         <View
             style={{
-                marginVertical: "auto",
-                marginHorizontal: 10,
-                minHeight: "60%",
-                display: "flex",
-                flexDirection: "row",
-                gap: 10,
-                // borderColor: "black",
-                // borderWidth: 2,
+                marginTop: 100,
             }}
         >
+            <Text>Group of Timers</Text>
+            <Text>{currentProfile.name}</Text>
             {currentProfile.timers.map((timer) => (
                 <TimerBox
                     key={timer.id}
