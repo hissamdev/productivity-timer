@@ -31,6 +31,8 @@ export const useProfileStore = create<ProfileState>((set) => ({
             const newProfile = {
                 id: res[0].id,
                 name: res[0].name,
+                desc: res[0].desc,
+                lastUsed: res[0].lastUsed,
                 timers: [],
             };
 

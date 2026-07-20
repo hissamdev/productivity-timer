@@ -46,7 +46,7 @@ export default function TimersScreen() {
                     key={timer.id}
                     label={timer.label}
                     timerId={timer.id}
-                ></TimerBox>
+                />
             ))}
         </View>
     );
