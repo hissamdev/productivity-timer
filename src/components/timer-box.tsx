@@ -1,15 +1,24 @@
 import { TimerWithData } from "@/types/types";
-import { handleTimerData } from "@/utils/timerDataSetters";
-import { useEffect, useRef, useState } from "react";
-import { StyleSheet, Text, TouchableOpacity, View } from "react-native";
+import { deleteTimer } from "@/utils/helpers";
+import { handleTimerData, updateTimerName } from "@/utils/timerDataSetters";
+import React, { SetStateAction, useEffect, useRef, useState } from "react";
+import {
+    StyleSheet,
+    Text,
+    TextInput,
+    TouchableOpacity,
+    View,
+} from "react-native";
 import { useProfileStore } from "./state-management/useProfileStore";
 
 type Props = {
     groupId: string;
     timer: TimerWithData;
+    editing: boolean;
+    setEditing: React.Dispatch<SetStateAction<boolean>>;
 };
-export default function TimerBox({ groupId, timer }: Props) {
-    const { updateData, createTimer } = useProfileStore();
+export default function TimerBox({ groupId, timer, editing }: Props) {
+    const { updateData, setTimerName, setRemoveTimer } = useProfileStore();
     const [seconds, setSeconds] = useState(0);
     const timerRef = useRef<ReturnType<typeof setInterval> | null>(null);
 
@@ -95,13 +104,58 @@ export default function TimerBox({ groupId, timer }: Props) {
         updateData(groupId, timer.id, res[0]);
     };
 
+    const handleNameInput = async (value: string) => {
+        if (!value) {
+            console.log("No value");
+            return;
+        }
+        const res = await updateTimerName(timer.id, value);
+        if (!res) return;
+        setTimerName(groupId, timer.id, value);
+    };
+
+    const handleTimerDelete = async () => {
+        const res = await deleteTimer(timer.id);
+        if (!res) return;
+        setRemoveTimer(groupId, timer.id);
+    };
+
     return (
         <View>
+            {editing && (
+                <TouchableOpacity
+                    onPress={handleTimerDelete}
+                    style={{
+                        position: "absolute",
+                        top: 10,
+                        right: -10,
+                        paddingVertical: 2,
+                        paddingHorizontal: 4,
+                        borderRadius: 5,
+                        backgroundColor: "#FF5252",
+                    }}
+                >
+                    <Text style={{ color: "white", fontSize: 12 }}>Delete</Text>
+                </TouchableOpacity>
+            )}
             <TouchableOpacity
                 onPress={handleTimerPress}
                 style={styles.timerContainer}
             >
-                <Text style={{ marginTop: 12 }}>{timer.label}</Text>
+                {editing ? (
+                    <TextInput
+                        onChangeText={handleNameInput}
+                        style={{
+                            marginTop: 12,
+                            borderWidth: 1,
+                            borderColor: "black",
+                        }}
+                    >
+                        {timer.label}
+                    </TextInput>
+                ) : (
+                    <Text style={{ marginTop: 12 }}>{timer.label}</Text>
+                )}
                 <Text style={{ fontSize: 18 }}>
                     {isInitial
                         ? "00:00"

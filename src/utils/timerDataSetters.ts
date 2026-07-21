@@ -1,6 +1,24 @@
 import { db } from "@/db/db";
-import { timerDataTable } from "@/db/schema";
+import { timerDataTable, timerTable } from "@/db/schema";
 import { TimerData } from "@/types/types";
+import { eq } from "drizzle-orm";
+
+export async function updateTimerName(timerId: string, value: string) {
+    try {
+        const res = await db
+            .update(timerTable)
+            .set({
+                label: value,
+            })
+            .where(eq(timerTable.id, timerId))
+            .returning();
+
+        return res;
+    } catch (err) {
+        console.error(err);
+        return;
+    }
+}
 
 export async function handleTimerData(
     timerId: string,

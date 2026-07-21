@@ -1,5 +1,6 @@
 import { ProfileWithTimers, TimerData } from "@/types/types";
 import {
+    deleteTimer,
     getProfiles,
     handleCreateProfile,
     handleCreateTimer,
@@ -10,9 +11,11 @@ type ProfileState = {
     profiles: ProfileWithTimers[];
     initProfiles: () => void;
     updateData: (groupId: string, timerId: string, newData: TimerData) => void;
+    setTimerName: (groupId: string, timerId: string, value: string) => void;
+    setRemoveTimer: (groupId: string, timerId: string) => void;
     setTimerRunning: (groupId: string, timerId: string, bool: boolean) => void;
     createProfile: () => Promise<void>;
-    createTimer: (profileId: string) => Promise<void>;
+    createTimer: (profileId: string, label: string) => Promise<void>;
 };
 
 export const useProfileStore = create<ProfileState>((set) => ({
@@ -25,6 +28,40 @@ export const useProfileStore = create<ProfileState>((set) => ({
             return;
         }
         set({ profiles: profileData });
+    },
+    setTimerName: (groupId, timerId, value) => {
+        set((prev) => ({
+            profiles: prev.profiles.map((profile) =>
+                profile.id === groupId
+                    ? {
+                          ...profile,
+                          timers: profile.timers.map((timer) =>
+                              timer.id === timerId
+                                  ? {
+                                        ...timer,
+                                        label: value,
+                                    }
+                                  : timer,
+                          ),
+                      }
+                    : profile,
+            ),
+        }));
+    },
+    setRemoveTimer: async (groupId, timerId) => {
+        const res = await deleteTimer(timerId);
+        set((prev) => ({
+            profiles: prev.profiles.map((profile) =>
+                profile.id === groupId
+                    ? {
+                          ...profile,
+                          timers: profile.timers.filter(
+                              (timer) => timer.id !== timerId,
+                          ),
+                      }
+                    : profile,
+            ),
+        }));
     },
     setTimerRunning: (groupId, timerId, bool) => {
         set((prev) => ({
@@ -82,8 +119,8 @@ export const useProfileStore = create<ProfileState>((set) => ({
             return { profiles: [...prev.profiles, newProfile] };
         });
     },
-    createTimer: async (profileId) => {
-        const res = await handleCreateTimer(profileId);
+    createTimer: async (profileId, label) => {
+        const res = await handleCreateTimer(profileId, label);
         if (!res) return;
         set((prev) => ({
             profiles: prev.profiles.map((profile) =>

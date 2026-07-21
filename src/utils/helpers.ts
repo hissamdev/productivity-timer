@@ -1,5 +1,7 @@
 import { db } from "@/db/db";
 import { timerProfilesTable, timerTable } from "@/db/schema";
+import { eq } from "drizzle-orm";
+import z from "zod";
 
 export async function getProfiles() {
     try {
@@ -43,16 +45,33 @@ export async function handleCreateProfile() {
     }
 }
 
-export async function handleCreateTimer(profileId: string) {
+const stringSchema = z.string();
+
+export async function handleCreateTimer(profileId: string, label: string) {
+    const safeLabel = stringSchema.safeParse(label);
+
     try {
         const res = await db
             .insert(timerTable)
             .values({
                 profileId,
-                label: "New Timer",
+                label: safeLabel.success ? safeLabel.data : "New Timer",
             })
             .returning();
         if (!res) return;
+        return res;
+    } catch (err) {
+        console.error(err);
+        return;
+    }
+}
+
+export async function deleteTimer(timerId: string) {
+    try {
+        const res = await db
+            .delete(timerTable)
+            .where(eq(timerTable.id, timerId))
+            .returning();
         return res;
     } catch (err) {
         console.error(err);
