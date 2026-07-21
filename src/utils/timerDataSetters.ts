@@ -12,8 +12,7 @@ export async function handleTimerData(
     // on "resume" do same as above, but store it in paused_total
     // on "reset", if last one was pause, then save it to pause total
     const currentTime = new Date();
-    if (!lastData) {
-        console.log("Start detected");
+    if (!lastData || type === "start") {
         try {
             const res = await db
                 .insert(timerDataTable)
@@ -35,9 +34,7 @@ export async function handleTimerData(
     const elapsed =
         (currentTime.getTime() - lastData?.timestamp.getTime()) / 1000;
 
-    if (type === "start") {
-        console.log("Start detected");
-    } else if (type === "pause") {
+    if (type === "pause") {
         try {
             const res = await db
                 .insert(timerDataTable)
@@ -71,18 +68,23 @@ export async function handleTimerData(
         }
     } else {
         try {
-            const res = await db.insert(timerDataTable).values({
-                timerId,
-                type,
-                elapsedTotal:
-                    lastData.type !== "pause"
-                        ? lastData.elapsedTotal + elapsed
-                        : lastData.elapsedTotal,
-                pausedTotal:
-                    lastData.type === "pause"
-                        ? lastData.pausedTotal + elapsed
-                        : lastData.pausedTotal,
-            });
+            const res = await db
+                .insert(timerDataTable)
+                .values({
+                    timerId,
+                    type,
+                    elapsedTotal:
+                        lastData.type !== "pause"
+                            ? lastData.elapsedTotal + elapsed
+                            : lastData.elapsedTotal,
+                    pausedTotal:
+                        lastData.type === "pause"
+                            ? lastData.pausedTotal + elapsed
+                            : lastData.pausedTotal,
+                })
+                .returning();
+
+            return res;
         } catch (err) {
             console.log(err);
         }

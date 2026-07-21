@@ -89,6 +89,12 @@ export default function TimerBox({ groupId, timer }: Props) {
         }
     };
 
+    const handleTimerReset = async () => {
+        const res = await handleTimerData(timer.id, "reset", timer.data[0]);
+        if (!res) return;
+        updateData(groupId, timer.id, res[0]);
+    };
+
     return (
         <View>
             <TouchableOpacity
@@ -97,9 +103,16 @@ export default function TimerBox({ groupId, timer }: Props) {
             >
                 <Text style={{ marginTop: 12 }}>{timer.label}</Text>
                 <Text style={{ fontSize: 18 }}>
-                    {isPaused ? "Paused" : formatSeconds(seconds)}
+                    {isInitial
+                        ? "00:00"
+                        : isPaused
+                          ? "Paused"
+                          : formatSeconds(seconds)}
                 </Text>
-                <TouchableOpacity style={styles.stopCircle}>
+                <TouchableOpacity
+                    onPress={handleTimerReset}
+                    style={styles.stopCircle}
+                >
                     <View
                         style={{
                             aspectRatio: 1 / 1,
@@ -117,9 +130,11 @@ export default function TimerBox({ groupId, timer }: Props) {
                     }}
                 >
                     Paused for:{" "}
-                    {isContinue
-                        ? formatSeconds(timer?.data?.[0]?.pausedTotal)
-                        : formatSeconds(seconds)}
+                    {isInitial
+                        ? "00:00"
+                        : isContinue
+                          ? formatSeconds(timer?.data?.[0]?.pausedTotal)
+                          : formatSeconds(seconds)}
                 </Text>
             </View>
         </View>
