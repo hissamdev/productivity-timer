@@ -1,6 +1,7 @@
 import { useProfileStore } from "@/components/state-management/useProfileStore";
 import TimerBox from "@/components/timer-box";
 import { useLocalSearchParams } from "expo-router";
+import { Plus } from "lucide-react-native";
 import { Text, TouchableOpacity, View } from "react-native";
 
 export default function TimersScreen() {
@@ -33,8 +34,9 @@ export default function TimersScreen() {
     return (
         <View
             style={{
-                marginTop: 100,
+                marginTop: 50,
                 marginHorizontal: 20,
+                flex: 1,
             }}
         >
             <Text
@@ -58,6 +60,10 @@ export default function TimersScreen() {
             <View
                 style={{
                     marginTop: 20,
+                    display: "flex",
+                    flexDirection: "row",
+                    justifyContent: "space-between",
+                    flexWrap: "wrap",
                 }}
             >
                 {currentProfile.timers.map((timer) => (
@@ -68,6 +74,24 @@ export default function TimersScreen() {
                     />
                 ))}
             </View>
+
+            <TouchableOpacity
+                onPress={() => createTimer(currentProfile.id)}
+                style={{
+                    position: "absolute",
+                    right: 20,
+                    bottom: 60,
+                    aspectRatio: 1 / 1,
+                    width: 50,
+                    display: "flex",
+                    justifyContent: "center",
+                    alignItems: "center",
+                    backgroundColor: "#10BFFF",
+                    borderRadius: 18,
+                }}
+            >
+                <Plus color="white" size={29} />
+            </TouchableOpacity>
         </View>
     );
 }
