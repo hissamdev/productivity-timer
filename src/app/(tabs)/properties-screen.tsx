@@ -1,9 +1,10 @@
+import Modal from "@/components/properties/create-property";
 import { Plus, X } from "lucide-react-native";
 import { useState } from "react";
 import { Text, TouchableOpacity, View } from "react-native";
 
 export default function Milestones() {
-    const [showCreate, setShowCreate] = useState(false);
+    const [showModal, setShowModal] = useState(false);
 
     return (
         <View>
@@ -24,7 +25,7 @@ export default function Milestones() {
                     }}
                 >
                     <TouchableOpacity
-                        onPress={() => setShowCreate((prev) => !prev)}
+                        onPress={() => setShowModal((prev) => !prev)}
                         style={{
                             backgroundColor: "#4696FF",
                             borderRadius: 5,
@@ -49,64 +50,39 @@ export default function Milestones() {
                     Update your properties daily and reflect on historic data
                 </Text>
             </View>
-            {showCreate && (
-                <View
-                    onBlur={() => setShowCreate(false)}
-                    style={{
-                        display: "flex",
-                        alignItems: "center",
-                        justifyContent: "center",
-                        position: "absolute",
-                        zIndex: 20,
-                        inset: 0,
-                        paddingHorizontal: 20,
-                        paddingVertical: 80,
-                        height: "auto",
-                    }}
-                >
+            {showModal && (
+                <Modal setShow={setShowModal}>
                     <View
                         style={{
-                            padding: 20,
-                            width: "100%",
-                            height: "100%",
-                            // borderWidth: 1,
-                            // borderColor: "black",
-                            borderRadius: 18,
-                            backgroundColor: "white",
+                            display: "flex",
+                            flexDirection: "row",
+                            justifyContent: "space-between",
                         }}
                     >
-                        <View
+                        <Text
                             style={{
-                                display: "flex",
-                                flexDirection: "row",
-                                justifyContent: "space-between",
+                                fontSize: 19,
+                                fontWeight: 600,
                             }}
                         >
-                            <Text
+                            Create Property
+                        </Text>
+                        <View>
+                            <TouchableOpacity
+                                onPress={() => setShowModal(false)}
                                 style={{
-                                    fontSize: 19,
-                                    fontWeight: 600,
+                                    padding: 5,
+                                    flex: 0,
+                                    borderWidth: 1,
+                                    borderColor: "#94A3B8",
+                                    borderRadius: 4,
                                 }}
                             >
-                                Create Property
-                            </Text>
-                            <View>
-                                <TouchableOpacity
-                                    onPress={() => setShowCreate(false)}
-                                    style={{
-                                        padding: 5,
-                                        flex: 0,
-                                        borderWidth: 1,
-                                        borderColor: "#94A3B8",
-                                        borderRadius: 4,
-                                    }}
-                                >
-                                    <X size={16} />
-                                </TouchableOpacity>
-                            </View>
+                                <X size={16} />
+                            </TouchableOpacity>
                         </View>
                     </View>
-                </View>
+                </Modal>
             )}
         </View>
     );
