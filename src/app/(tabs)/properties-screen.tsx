@@ -1,5 +1,6 @@
-import Modal from "@/components/properties/create-property";
-import { Plus, X } from "lucide-react-native";
+import CreateProperty from "@/components/properties/create-property";
+import Modal from "@/components/properties/modal";
+import { Plus } from "lucide-react-native";
 import { useState } from "react";
 import { Text, TouchableOpacity, View } from "react-native";
 
@@ -52,36 +53,7 @@ export default function Milestones() {
             </View>
             {showModal && (
                 <Modal setShow={setShowModal}>
-                    <View
-                        style={{
-                            display: "flex",
-                            flexDirection: "row",
-                            justifyContent: "space-between",
-                        }}
-                    >
-                        <Text
-                            style={{
-                                fontSize: 19,
-                                fontWeight: 600,
-                            }}
-                        >
-                            Create Property
-                        </Text>
-                        <View>
-                            <TouchableOpacity
-                                onPress={() => setShowModal(false)}
-                                style={{
-                                    padding: 5,
-                                    flex: 0,
-                                    borderWidth: 1,
-                                    borderColor: "#94A3B8",
-                                    borderRadius: 4,
-                                }}
-                            >
-                                <X size={16} />
-                            </TouchableOpacity>
-                        </View>
-                    </View>
+                    <CreateProperty setShowModal={setShowModal} />
                 </Modal>
             )}
         </View>
