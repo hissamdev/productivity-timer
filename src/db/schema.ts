@@ -37,8 +37,37 @@ export const timerDataTable = sqliteTable("timer_data", {
     pausedTotal: integer("paused_total").notNull(),
 });
 
+export const propertiesTable = sqliteTable("properties", {
+    id: text("id")
+        .primaryKey()
+        .$defaultFn(() => createId()),
+    label: text("label"),
+    type: text("type").notNull().$type<"checkbox" | "dropdown">(),
+    color: text("color").notNull().default("#3B82F6"),
+    createdAt: integer("created_at", { mode: "timestamp_ms" })
+        .notNull()
+        .$defaultFn(() => new Date()),
+});
+
+export const propertyDataTable = sqliteTable("property_data", {
+    id: text("id")
+        .primaryKey()
+        .$defaultFn(() => createId()),
+    propertyId: text("property_id").notNull(),
+    triggeredAt: integer("triggered_at", { mode: "timestamp_ms" })
+        .notNull()
+        .$defaultFn(() => new Date()),
+    manualTime: integer("manual_time", { mode: "timestamp" }),
+});
+
 export const relations = defineRelations(
-    { timerProfilesTable, timerTable, timerDataTable },
+    {
+        timerProfilesTable,
+        timerTable,
+        timerDataTable,
+        propertiesTable,
+        propertyDataTable,
+    },
     (r) => ({
         timerProfilesTable: {
             timers: r.many.timerTable(),
@@ -54,6 +83,15 @@ export const relations = defineRelations(
             timer: r.one.timerTable({
                 from: r.timerDataTable.timerId,
                 to: r.timerTable.id,
+            }),
+        },
+        propertiesTable: {
+            data: r.many.propertyDataTable(),
+        },
+        propertyDataTable: {
+            property: r.one.propertiesTable({
+                from: r.propertyDataTable.propertyId,
+                to: r.propertiesTable.id,
             }),
         },
     }),
