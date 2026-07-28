@@ -1,3 +1,4 @@
+import { createProperty } from "@/utils/propertyHelpers";
 import { X } from "lucide-react-native";
 import { SetStateAction, useState } from "react";
 import {
@@ -39,6 +40,17 @@ export default function CreateProperty({ setShowModal }: Props) {
             label: "Violet",
         },
     ];
+
+    const handlePropertySubmit = async () => {
+        const info = {
+            icon,
+            name,
+            type,
+            color,
+        };
+
+        await createProperty(info);
+    };
 
     return (
         <Pressable
