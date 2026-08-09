@@ -6,6 +6,13 @@ export default function TabsLayout() {
     return (
         <Tabs screenOptions={{ headerShown: false }}>
             <Tabs.Screen
+                name="single-timer-screen"
+                options={{
+                    title: "Timer",
+                    tabBarIcon: () => <Clock3 strokeWidth={1.4} />,
+                }}
+            />
+            <Tabs.Screen
                 name="index"
                 options={{
                     title: "Timer Profiles",
