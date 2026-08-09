@@ -6,6 +6,8 @@ import m0002 from './20260718225715_boring_sauron/migration.sql';
 import m0003 from './20260719182327_curvy_vision/migration.sql';
 import m0004 from './20260720151137_worthless_natasha_romanoff/migration.sql';
 import m0005 from './20260720180519_green_korg/migration.sql';
+import m0006 from './20260805084424_next_roughhouse/migration.sql';
+import m0007 from './20260809035538_sudden_dexter_bennett/migration.sql';
 
   export default {
     migrations: {
@@ -14,7 +16,9 @@ import m0005 from './20260720180519_green_korg/migration.sql';
 "20260718225715_boring_sauron": m0002,
 "20260719182327_curvy_vision": m0003,
 "20260720151137_worthless_natasha_romanoff": m0004,
-"20260720180519_green_korg": m0005
+"20260720180519_green_korg": m0005,
+"20260805084424_next_roughhouse": m0006,
+"20260809035538_sudden_dexter_bennett": m0007
 }
   }
   

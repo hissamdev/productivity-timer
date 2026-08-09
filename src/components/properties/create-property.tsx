@@ -185,6 +185,7 @@ export default function CreateProperty({ setShowModal }: Props) {
             </View>
 
             <TouchableOpacity
+                onPress={handlePropertySubmit}
                 style={{
                     marginTop: "auto",
                     backgroundColor: "black",

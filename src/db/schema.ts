@@ -22,6 +22,14 @@ export const timerTable = sqliteTable("timer", {
     running: integer("running", { mode: "boolean" }).notNull().default(false),
 });
 
+export const singleTimerTable = sqliteTable("single_timer", {
+    id: text("id")
+        .primaryKey()
+        .$defaultFn(() => createId()),
+    name: text("name").notNull(),
+    description: text("desc").notNull().default(""),
+});
+
 export const timerDataTable = sqliteTable("timer_data", {
     id: text("id")
         .primaryKey()
@@ -35,6 +43,15 @@ export const timerDataTable = sqliteTable("timer_data", {
         .$defaultFn(() => new Date()),
     elapsedTotal: integer("elapsed_total").notNull(),
     pausedTotal: integer("paused_total").notNull(),
+});
+
+export const timestampDataTable = sqliteTable("timestamp_data", {
+    id: text("id")
+        .primaryKey()
+        .$defaultFn(() => createId()),
+    timerId: text("timer_id").notNull(),
+    timestamp: integer("timestamp", { mode: "timestamp_ms" }).notNull(),
+    note: text("note").notNull().default(""),
 });
 
 export const propertiesTable = sqliteTable("properties", {
